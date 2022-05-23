@@ -1,0 +1,19 @@
+[Unit]
+Description=Gunicorn daemon for Botos
+Requires=botos-gunicorn.socket
+After=network.target
+
+[Service]
+User=<username>
+Group=www-data
+WorkingDirectory=<botos-path>
+ExecStart=<venv-path>/bin/gunicorn \
+  --access-logfile <botos-path>/botos/app-access.log \
+  --error-logfile <botos-path>/botos/app-error.log \
+  --workers 3 \
+  --bind unix:/run/botos-gunicorn.sock \
+  botos.wsgi:application
+EnvironmentFile=<botos-path>/botos.env
+
+[Install]
+WantedBy=multi-user.target

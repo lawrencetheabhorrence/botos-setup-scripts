@@ -1,0 +1,8 @@
+[Unit]
+Description=Gunicorn socket for Botos
+
+[Socket]
+ListenStream=/run/botos-gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
