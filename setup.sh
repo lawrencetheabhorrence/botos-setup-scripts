@@ -51,11 +51,13 @@ pip install pipenv
 sudo -u postgres psql -c "CREATE DATABASE $BOTOS_DATABASE_NAME"
 sudo -u postgres psql -c "CREATE DATABASE $BOTOS_TEST_DATABASE_NAME"
 # you can change the password to the db, just make sure you also change it in botos.env
-sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME -c "CREATE USER $BOTOS_DATABASE_USERNAME WITH PASSWORD $BOTOS_DATABASE_PASSWORD"
-sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME -c "ALTER ROLE $BOTOS_DATABASE_USERNAME SET client_encoding TO 'utf-8'"
-sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME -c "ALTER ROLE $BOTOS_DATABASE_USERNAME SET default_transaction_isolation TO 'read committed'"
-sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME -c "ALTER ROLE comelec SET timezone TO 'UTC'"
-sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME -c "GRANT ALL PRIVILEGES ON DATABASE $BOTOS_DATABASE_NAME TO $BOTOS_DATABASE_USERNAME"
+sudo -u postgres -H -- psql -d $BOTOS_DATABASE_NAME << EOF
+CREATE USER $BOTOS_DATABASE_USERNAME WITH PASSWORD $BOTOS_DATABASE_PASSWORD
+ALTER ROLE $BOTOS_DATABASE_USERNAME SET client_encoding TO 'utf-8'
+ALTER ROLE $BOTOS_DATABASE_USERNAME SET default_transaction_isolation TO 'read committed'
+ALTER ROLE $BOTOS_DATABASE_USERNAME SET timezone TO 'UTC'
+GRANT ALL PRIVILEGES ON DATABASE $BOTOS_DATABASE_NAME TO $BOTOS_DATABASE_USERNAME
+EOF
 
 cd botos
 pipenv shell
