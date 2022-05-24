@@ -36,7 +36,7 @@ echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.loca
 echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH' >> ~/.bash_profile
 
 source ~/.bashrc
-export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH
+export PATH=$HOME/.pyenv/bin:$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH
 
 # install python build dependencies
 sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
@@ -53,7 +53,7 @@ sudo -u postgres psql -c "CREATE DATABASE $BOTOS_DATABASE_NAME"
 sudo -u postgres psql -c "CREATE DATABASE $BOTOS_TEST_DATABASE_NAME"
 # you can change the password to the db, just make sure you also change it in botos.env
 sudo -u postgres -H -- psql << EOF
-CREATE USER $BOTOS_DATABASE_USERNAME WITH PASSWORD $BOTOS_DATABASE_PASSWORD;
+CREATE USER $BOTOS_DATABASE_USERNAME WITH PASSWORD '$BOTOS_DATABASE_PASSWORD';
 ALTER ROLE $BOTOS_DATABASE_USERNAME SET client_encoding TO 'utf-8';
 ALTER ROLE $BOTOS_DATABASE_USERNAME SET default_transaction_isolation TO 'read committed';
 ALTER ROLE $BOTOS_DATABASE_USERNAME SET timezone TO 'UTC';
@@ -81,7 +81,6 @@ python manage.py collectstatic
 
 # create the superuser
 echo "from django.contrib.auth import get_user_model; User=get_user_model(); User.objects.create_super_user('$BOTOS_DATABASE_USERNAME','electionsemail@gmail.com','$BOTOS_DATABASE_PASSWORD')" | python manage.py shell
-EOF
 
 # gunicorn setup
 sudo cp "$SCRIPT_DIR/botos-gunicorn.socket" /etc/systemd/system
@@ -104,3 +103,4 @@ cp "$SCRIPT_PATH/split/userdata.csv" $BOTOS_PATH
 cp "$SCRIPT_PATH/upload_users.py" $BOTOS_PATH
 cd ~/botos
 echo "exec(open(upload_users.py).read())" | python manage.py shell
+EOF
