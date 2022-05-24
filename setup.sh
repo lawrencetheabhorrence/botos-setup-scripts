@@ -35,7 +35,7 @@ echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.loca
 echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH' >> ~/.profile
 echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH' >> ~/.bash_profile
 
-exec $SHELL
+. ~/.bashrc
 
 # install python build dependencies
 sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
@@ -59,12 +59,12 @@ ALTER ROLE $BOTOS_DATABASE_USERNAME SET timezone TO 'UTC'
 GRANT ALL PRIVILEGES ON DATABASE $BOTOS_DATABASE_NAME TO $BOTOS_DATABASE_USERNAME
 EOF
 
-cd botos
-pipenv shell
+cd ~/botos
 pipenv install
-pip install pandas numpy # dev dependency to upload users
+pipenv install pandas numpy # dev dependency to upload users
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
 
+pipenv run << EOF
 # export env vars
 set -o allexport
 source ~/botos/botos.env
@@ -78,6 +78,7 @@ python manage.py collectstatic
 
 # create the superuser
 echo "from django.contrib.auth import get_user_model; User=get_user_model(); User.objects.create_super_user('$BOTOS_DATABASE_USERNAME','electionsemail@gmail.com','$BOTOS_DATABASE_PASSWORD')" | python manage.py shell
+EOF
 
 # gunicorn setup
 sudo cp "$SCRIPT_DIR/botos-gunicorn.socket" /etc/systemd/system
