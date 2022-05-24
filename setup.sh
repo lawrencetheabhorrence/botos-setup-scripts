@@ -1,6 +1,6 @@
 #!/bin/bash
 source botos.env
-SCRIPT_DIR=$(pwd)
+SCRIPT_DIR="$HOME/botos-setup-scripts"
 BOTOS_PATH="$HOME/botos"
 cd ~
 
@@ -64,10 +64,10 @@ git clone https://github.com/seanballais/botos ~/botos
 
 cd ~/botos
 pipenv install
-pipenv install pandas numpy # dev dependency to upload users
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
 
 pipenv run << EOF
+pip install pandas numpy # dev dependency to upload users
 # export env vars
 set -o allexport
 source ~/botos/botos.env
