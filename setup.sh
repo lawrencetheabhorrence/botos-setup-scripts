@@ -1,6 +1,6 @@
 #!/bin/bash
 source botos.env
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(pwd)
 BOTOS_PATH="$HOME/botos"
 cd ~
 
@@ -36,6 +36,7 @@ echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.loca
 echo 'export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH' >> ~/.bash_profile
 
 source ~/.bashrc
+export PATH=$HOME/bin:$HOME/.local/lib/python3-5/site-packages:$HOME/.local/bin:/usr/bin:/usr/local/bin:/usr/sbin:/usr/local/sbin:$PATH
 
 # install python build dependencies
 sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
@@ -58,6 +59,8 @@ ALTER ROLE $BOTOS_DATABASE_USERNAME SET default_transaction_isolation TO 'read c
 ALTER ROLE $BOTOS_DATABASE_USERNAME SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE $BOTOS_DATABASE_NAME TO $BOTOS_DATABASE_USERNAME;
 EOF
+
+git clone https://github.com/seanballais/botos ~/botos
 
 cd ~/botos
 pipenv install
@@ -97,7 +100,7 @@ cd "$SCRIPT_PATH/xlsx"
 sh convertcsv.sh
 cd split
 python merge-users.py
-cp userdata.csv $BOTOS_PATH
+cp "$SCRIPT_PATH/split/userdata.csv" $BOTOS_PATH
 cp "$SCRIPT_PATH/upload_users.py" $BOTOS_PATH
-cd $BOTOS_PATH
+cd ~/botos
 echo "exec(open(upload_users.py).read())" | python manage.py shell
