@@ -65,42 +65,7 @@ git clone https://github.com/seanballais/botos ~/botos
 cd ~/botos
 pipenv install
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
-
-pipenv run << EOF
-pip install pandas numpy # dev dependency to upload users
-# export env vars
-set -o allexport
-source ~/botos/botos.env
-set +o allexport
-
-python manage.py makemigrations
-python manage.py migrate
-
-mkdir -p botos/static
-python manage.py collectstatic
-
-# create the superuser
-echo "from django.contrib.auth import get_user_model; User=get_user_model(); User.objects.create_super_user('$BOTOS_DATABASE_USERNAME','electionsemail@gmail.com','$BOTOS_DATABASE_PASSWORD')" | python manage.py shell
-
-# gunicorn setup
-sudo cp "$SCRIPT_DIR/botos-gunicorn.socket" /etc/systemd/system
-sudo sed -e "s|<botos-path>|$BOTOS_PATH|g" -e "s|<venv-path>|$(pipenv --venv)|g" "$SCRIPT_DIR/botos-gunicorn.service"> /etc/systemd/system/botos-gunicorn.service
-sudo systemctl enable --now botos-gunicorn.socket
-
-# setup nginx
-sudo mkdir -p /etc/nginx/sites-available
-sudo sed -e "s|<botos-path>|$BOTOS_PATH|g" "$SCRIPT_DIR/botos" > /etc/nginx/sites-available/botos
-sudo rm /etc/nginx/sites-enabled/default
-sudo ln -s /etc/nginx/sites-available/botos /etc/nginx/sites-enabled
-sudo systemctl restart nginx
-
-# upload the users to the database
-cd "$SCRIPT_PATH/xlsx"
-sh convertcsv.sh
-cd split
-python merge-users.py
-cp "$SCRIPT_PATH/split/userdata.csv" $BOTOS_PATH
-cp "$SCRIPT_PATH/upload_users.py" $BOTOS_PATH
-cd ~/botos
-echo "exec(open(upload_users.py).read())" | python manage.py shell
-EOF
+echo "[scripts]" >> ~/botos/Pipfile
+echo "setup = sh ~/botos-setup-scripts/botos_py_setup.sh" >> ~/botos/Pipfile
+chmod +x ~/botos_py_setup.sh
+pipenv run setup
