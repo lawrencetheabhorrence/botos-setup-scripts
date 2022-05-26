@@ -66,6 +66,6 @@ cd ~/botos
 pipenv install
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
 echo "[scripts]" >> ~/botos/Pipfile
-echo "setup = sh ~/botos-setup-scripts/botos_py_setup.sh" >> ~/botos/Pipfile
-chmod +x ~/botos_py_setup.sh
+echo 'setup="sh ~/botos-setup-scripts/botos_py_setup.sh"' >> ~/botos/Pipfile
+chmod +x ~/botos-setup-scripts/botos_py_setup.sh
 pipenv run setup
