@@ -85,4 +85,4 @@ cp "$SCRIPT_DIR/botos_dev.env" ~/botos/botos_dev.env
 echo "[scripts]" >> ~/botos/Pipfile
 echo "setup=\"sh $HOME/botos-setup-scripts/botos_py_setup.sh\"" >> ~/botos/Pipfile
 chmod +x ~/botos-setup-scripts/botos_py_setup.sh
-pipenv run setup
+PIPENV_DOTENV_LOCATON=$HOME/botos-setup-scripts/botos.env pipenv run setup
