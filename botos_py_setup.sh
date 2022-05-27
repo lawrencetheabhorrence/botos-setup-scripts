@@ -4,6 +4,7 @@ cd $HOME/botos
 set -o allexport
 source $HOME/botos/botos.env
 set +o allexport
+source $HOME/botos/botos_dev.env
 
 python manage.py makemigrations
 python manage.py migrate
