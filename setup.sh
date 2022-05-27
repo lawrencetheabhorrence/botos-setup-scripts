@@ -69,12 +69,12 @@ for f in $HOME/botos-setup-scripts/xlsx/*.xlsx
 do
   for i in {1..3}
   do
-    xlsx2csv -s $i $f "~/botos-setup-scripts/xlsx/split/${f%.*}-$i.csv"
+    xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$f" "$HOME/botos-setup-scripts/xlsx/split/${f%.*}-$i.csv"
   done
 done
-python ~/botos-setup-scripts/xlsx/split/merge-users.py
-cp "~/botos-setup-scripts/xlsx/split/userdata.csv" ~/botos
-cp "~/botos-setup-scripts/upload_users.py" ~/botos
+python $HOME/botos-setup-scripts/xlsx/split/merge-users.py
+cp "$HOME/botos-setup-scripts/xlsx/split/userdata.csv" ~/botos
+cp "$HOME/botos-setup-scripts/upload_users.py" ~/botos
 
 cd ~/botos
 pipenv install
