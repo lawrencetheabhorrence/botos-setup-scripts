@@ -62,10 +62,25 @@ EOF
 
 git clone https://github.com/seanballais/botos ~/botos
 
+# Assuming that the excel files have 3 sheets
+pip install xlsx2csv pandas numpy
+mkdir split
+for f in $HOME/botos-setup-scripts/xlsx/*.xlsx
+do
+  for i in {1..3}
+  do
+    xlsx2csv -s $i $f "~/botos-setup-scripts/xlsx/split/${f%.*}-$i.csv"
+  done
+done
+python ~/botos-setup-scripts/xlsx/split/merge-users.py
+cp "~/botos-setup-scripts/xlsx/split/userdata.csv" ~/botos
+cp "~/botos-setup-scripts/upload_users.py" ~/botos
+
 cd ~/botos
 pipenv install
+pipenv install --dev numpy pandas
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
 echo "[scripts]" >> ~/botos/Pipfile
-echo 'setup="sh ~/botos-setup-scripts/botos_py_setup.sh"' >> ~/botos/Pipfile
+echo "setup=\"sh $HOME/botos-setup-scripts/botos_py_setup.sh\"" >> ~/botos/Pipfile
 chmod +x ~/botos-setup-scripts/botos_py_setup.sh
 pipenv run setup
