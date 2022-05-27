@@ -6,7 +6,7 @@ cd ~
 
 # install prerequisites
 sudo apt update
-sudo apt install libpq-dev postgresql postgresql-contrib nginx python3-pip python3-dev python3
+sudo apt install libpq-dev postgresql postgresql-contrib nginx python3-pip python3-dev python3 python
 
 # setup firewall (optional?)
 sudo apt install ufw

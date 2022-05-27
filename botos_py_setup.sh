@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 cd $HOME/botos
 # export env vars
 set -o allexport
