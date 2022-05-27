@@ -22,12 +22,14 @@
 import pandas as pd
 import os
 
-paths = [f for f in os.listdir('~/botos-setup-scripts/xlsx/split') if f.endswith('csv')]
-dfs = [pd.read_csv(f,index_col=False) for f in paths]
+folder = os.path.expanduser('~/botos-setup-scripts/xlsx/split')
+
+paths = [f for f in os.listdir(folder) if f.endswith('csv')]
+dfs = [pd.read_csv(f"{folder}/{f}",index_col=False) for f in paths]
 column_order=["Last Name:","First Name:","Batch:","Section:","Username:","Password:","Email Address:"]
 for df in dfs:
     # remove trailing spaces
     df.columns = df.columns.str.strip()
     df = df.reindex(columns=column_order)
 # merge the users and write to a csv
-pd.concat(dfs).to_csv("~/botos-setup-scripts/xlsx/split/userdata.csv",index=False)
+pd.concat(dfs).to_csv(f"{folder}/userdata.csv",index=False)

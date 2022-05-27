@@ -69,6 +69,7 @@ for f in $HOME/botos-setup-scripts/xlsx/*.xlsx
 do
   for i in {1..3}
   do
+    fb = ${f##*/}
     xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$f" "$HOME/botos-setup-scripts/xlsx/split/${f%.*}-$i.csv"
   done
 done
