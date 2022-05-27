@@ -25,7 +25,7 @@ import os
 folder = os.path.expanduser('~/botos-setup-scripts/xlsx/split')
 
 paths = [f for f in os.listdir(folder) if f.endswith('csv')]
-dfs = [pd.read_csv(f"{folder}/{f}",index_col=False) for f in paths]
+dfs = [pd.read_csv(folder + "/" + f,index_col=False) for f in paths]
 column_order=["Last Name:","First Name:","Batch:","Section:","Username:","Password:","Email Address:"]
 for df in dfs:
     # remove trailing spaces
