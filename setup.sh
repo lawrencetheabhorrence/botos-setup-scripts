@@ -70,7 +70,7 @@ do
   for i in {1..3}
   do
     fb = ${f##*/}
-    xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$f" "$HOME/botos-setup-scripts/xlsx/split/${f%.*}-$i.csv"
+    xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$fb" "$HOME/botos-setup-scripts/xlsx/split/${fb%.*}-$i.csv"
   done
 done
 python $HOME/botos-setup-scripts/xlsx/split/merge-users.py
