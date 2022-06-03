@@ -1,5 +1,8 @@
 #!/bin/bash
 cd $HOME/botos
+python $HOME/botos-setup-scripts/xlsx/split/merge-users.py
+cp "$HOME/botos-setup-scripts/xlsx/split/userdata.csv" ~/botos
+cp "$HOME/botos-setup-scripts/upload_users.py" ~/botos
 
 python manage.py makemigrations
 python manage.py migrate

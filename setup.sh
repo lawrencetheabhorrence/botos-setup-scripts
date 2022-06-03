@@ -73,16 +73,9 @@ do
     xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$fb" "$HOME/botos-setup-scripts/xlsx/split/${fb%.*}-$i.csv"
   done
 done
-python $HOME/botos-setup-scripts/xlsx/split/merge-users.py
-cp "$HOME/botos-setup-scripts/xlsx/split/userdata.csv" ~/botos
-cp "$HOME/botos-setup-scripts/upload_users.py" ~/botos
 
 cd ~/botos
 pipenv install
 pipenv install --dev numpy pandas
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
 cp "$SCRIPT_DIR/botos_dev.env" ~/botos/botos_dev.env
-echo "[scripts]" >> ~/botos/Pipfile
-echo "setup=\"sh $HOME/botos-setup-scripts/botos_py_setup.sh\"" >> ~/botos/Pipfile
-chmod +x ~/botos-setup-scripts/botos_py_setup.sh
-PIPENV_DOTENV_LOCATON=$HOME/botos-setup-scripts/botos.env pipenv run setup
