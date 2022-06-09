@@ -6,6 +6,7 @@ import core.models.election_models as em
 
 User = get_user_model()
 df = pd.read_csv("userdata.csv",index_col=False)
+df.loc[df["Batch:"] == 2022,"Section:"] = df["Section:"] + "12"
 rows = df.shape[0]
 
 for i in range(rows):
@@ -18,7 +19,7 @@ for i in range(rows):
                          last_name=r['Last Name:'])
 
 # Now we create the VoterProfiles, but we have to instatiate some data first
-sections = np.concatenate((df["Section:"].unique(),["A12","B12","C12"]))
+sections = np.concatenate(df["Section:"].unique())
 batches = df["Batches:"].unique()
 sy = "2022-2023" # change this to your liking
 elec = em.Election(name=sy)
@@ -32,13 +33,10 @@ for b in batches:
 
 # helper functions to retrieve the section and batch of a user
 def c(v):
-    return df["Email Address:"] == v.email
+    return df["Email:"] == v.email
 def get_batch(v):
-    return df[c(v)]["Batch:"][0]
+    return df[c(v)]["Batch:"].values[0]
 def get_section(v):
-    # we have to do it this way probably due
-    # to a quirk with how strings are represented
-    # in pandas
     return df[c(v)]["Section:"].values[0]
 
 # now we can attach VoterProfiles to each of the users

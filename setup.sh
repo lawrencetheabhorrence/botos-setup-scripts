@@ -67,7 +67,8 @@ pip install xlsx2csv pandas numpy
 mkdir split
 for f in $HOME/botos-setup-scripts/xlsx/*.xlsx
 do
-  for i in {1..3}
+  c = $(xlsx2csv -c $f)
+  for i in {1..$c}
   do
     fb=${f##*/}
     xlsx2csv -s $i "$HOME/botos-setup-scripts/xlsx/$fb" "$HOME/botos-setup-scripts/xlsx/split/${fb%.*}-$i.csv"
@@ -78,4 +79,3 @@ cd ~/botos
 pipenv install
 pipenv install --dev numpy pandas
 cp "$SCRIPT_DIR/botos.env" ~/botos/botos.env
-cp "$SCRIPT_DIR/botos_dev.env" ~/botos/botos_dev.env
